@@ -1,0 +1,2192 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Paleta de marca */
+  --amarillo: #FFC72C;
+  --amarillo-hover: #F2B800;
+  --rojo: #DA291C;
+  --negro: #27251F;
+  --blanco: #FFFFFF;
+
+  /* Neutros suaves: dejan que el rojo y el amarillo sean acentos */
+  --gris-fondo: #F6F7F8;
+  --gris-borde: #E7E9EA;
+  --gris-texto: #5F6360;
+
+  /*tokens de diseño para todo el sitio*/
+  --superficie: #FFFFFF;
+  --superficie-suave: #FAFBFB;
+  --acento-suave: rgba(255, 199, 44, 0.16);
+  --sombra-suave: 0 1px 2px rgba(30, 30, 26, 0.04), 0 14px 34px -20px rgba(30, 30, 26, 0.22);
+  --sombra-elevada: 0 8px 18px rgba(30, 30, 26, 0.12), 0 20px 44px -22px rgba(30, 30, 26, 0.28);
+  --radio: 18px;
+  --radio-sm: 12px;
+  --velocidad: 0.25s;
+}
+
+html {
+  scroll-behavior: smooth;/*para que el desplazamiento sea suave*/
+  scroll-padding-top: 100px; /* para que el menú fijo no tape los títulos */
+  /* Cada sección se "imanta" al desplazarse: no se ven dos juntas */
+  scroll-snap-type: y proximity;/*para que las secciones se "imanten" al desplazarse*/
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--gris-fondo);
+  /* Fondo: la imagen (roja/amarilla) se suaviza con una capa blanca
+     translúcida para que no compita con el contenido. Usamos la versión
+     ampliada para que no se pixele en pantallas grandes. */
+  background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url("img/sonrisa-hd.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  background-attachment: fixed;
+  color: var(--negro);
+  line-height: 1.6;/*ritmo de lectura más cómodo*/
+  -webkit-font-smoothing: antialiased;/*texto más limpio en pantallas claras*/
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Jerarquía tipográfica consistente en toda la página */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+::selection {
+  background-color: var(--amarillo);
+  color: var(--negro);
+}
+
+/* Foco visible y discreto para navegar con teclado */
+:focus-visible {
+  outline: 2px solid var(--rojo);
+  outline-offset: 3px;
+}
+
+/* ==========================================================
+   TRES RALLITAS SUPERIORES: la paleta guardada en 3 líneas
+   ========================================================== */
+.franjas {
+  display: flex;
+  height: 6px;/*línea de color más fina y elegante*/
+}
+/*para insertar colores a las franjas en especifico ya declarados en otra variable root*/
+.franja { flex: 1; }
+.franja.roja     { background-color: var(--rojo); }
+.franja.amarilla { background-color: var(--amarillo); }
+.franja.negra    { background-color: var(--negro); }
+
+/* 
+   BARRA DE NAVEGACIÓN HORIZONTAl */
+.barra-navegacion {
+  position: sticky; /*esta hace que elmenu de navegacion no se mueva al momento de bajar*/
+  top: 0;/*este le indica donde debe quedarse pegado*/
+  z-index: 100;/*permite que controle el orden de las capas, asegura que la barra de navegacion siempre este por del resto del contenido*/
+  background-color: rgba(255, 255, 255, 0.9);/*ligera transparencia*/
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);/*efecto de cristal al hacer scroll*/
+  border-bottom: 1px solid var(--gris-borde);
+  box-shadow: 0 6px 24px -20px rgba(30, 30, 26, 0.35);
+}
+/*menú de navegación completo*/
+.menu {
+  position: relative;
+  max-width: 1300px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 20px;
+}
+
+.marca { /*acá se llama al logo, tanto a la imagen como al texto*/
+  display: flex;
+  align-items: center; /*el display trabaja junto con este para colocar los elementos en una misma linea*/
+  gap: 10px; /*deja un peque;o espacion entre el logo y el texto*/
+  text-decoration: none;/*como la marca es tambien un enlace el text-decoration: none; quita el subrayado por defecto*/
+  color: var(--rojo);
+  font-size: 1.3rem;/*este de aca es el tamaño del texto*/
+  font-weight: 800;/*esta le otorga el grosor al texto*/
+}
+
+.logo {
+  height: 30px;/*este es para el alto de la imagen*/
+  width: auto;/*este es para el ancho de la imagen, auto le indica al navegador que lo ajuste de manera automatica */
+  object-fit: contain;/*le indica al navegador que escale la imagen dentro del espacio asignado sin recortar ninguna parte de su contenido*/
+}
+
+/* Casilla oculta que controla el menú lateral (solo HTML y CSS) */
+.toggle-lateral { display: none; }/*esconde el cuadro del checkbox*/
+
+.menu-lista { /*controla y distribuye los elementos del menú*/
+  list-style: none;/*por defecto los ul en los navegadores le colocan un punto, vi;eta. esto se lo quita para que se vea limpio*/
+  display: flex;
+  align-items: center;/*ponen todos los elementos uno del lado del otro y los centra con los logos*/
+  gap: 6px;/*el espacio entre los elementos del menú*/
+  margin-left: auto;/*empuja todo hacia la derecha separandola del logo tipo*/
+}
+
+.menu-lista a {/*acá estamos llamando a todos los enlaces del menú*/
+  position: relative;/*referencia para la línea animada*/
+  display: block;/*convierte el enlace en un bloque que pueda aceptar propiedaddes de tamalo y espacio*/
+  text-decoration: none;/*le quita la linea subrayada tipica de los enlaces*/
+  color: var(--gris-texto);/*;e otorga e;color que va a tener el enlace*/
+  font-size: 0.9rem;/*tamaño de la fuente del enlace */
+  font-weight: 600;/*grosor de semi negrita*/
+  padding: 8px 14px;/*espacio interno al enlace, a los lados,arriba y abajo*/
+  border-radius: 999px; /* efecto píldora */
+  transition: background-color var(--velocidad) ease, color var(--velocidad) ease;/*hace que cambio de color no sea brusco y tenga una animación*/
+}
+
+/* Línea de acento que crece al pasar el cursor */
+.menu-lista a::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 5px;
+  height: 2px;
+  border-radius: 2px;
+  background-color: var(--amarillo);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--velocidad) ease;
+}
+
+.menu-lista a:hover,
+.menu-lista a:focus-visible {/*el hover es un selector especial que se activa cuando el usuario pasa el mouse por encima del enlace */
+  background-color: var(--superficie-suave);
+  color: var(--negro);
+}
+
+.menu-lista a:hover::after,
+.menu-lista a:focus-visible::after {
+  transform: scaleX(1);
+}
+
+/* Botón de tres rayitas (junto al logo BMT) */
+.hamburguesa {
+  display: flex;/*hace que el elemento se alinee verticalmente*/
+  flex-direction: column;/*se apile en columna*/
+  justify-content: center;/*se centren la líneas*/
+  gap: 5px;/*con su espaciado*/
+  padding: 9px; /*y le da un espacio interno para todos los lados */
+  border: 1px solid var(--gris-borde);
+  border-radius: 10px;/*le coloca un borde redondeado */
+  background-color: var(--blanco);
+  cursor: pointer;/*esta esto hace que al momento de pasar el cursor se cambie al simbolo de una mano, indicando que es un boton para presionar*/
+  transition: background-color var(--velocidad) ease, border-color var(--velocidad) ease, transform var(--velocidad) ease;/*esto es para que cambie el color de fondo de una manera suave*/
+}
+
+.hamburguesa:hover {
+  background-color: var(--superficie-suave);
+  border-color: var(--amarillo);
+}
+
+.hamburguesa:active {
+  transform: scale(0.94);
+}
+
+.hamburguesa span {
+  width: 26px;/*este es para el ancho de cada linea*/
+  height: 3px;/*este es para el alto de cada linea*/
+  border-radius: 2px;/*y este para el borde redondeado*/
+}
+/*este es para los colres de cada linea*/
+.hamburguesa .r1 { background-color: var(--rojo); }
+.hamburguesa .r2 { background-color: var(--amarillo); }
+.hamburguesa .r3 { background-color: var(--negro); }
+
+/* ==========================================================
+   LAYOUT: MENÚ LATERAL + CONTENIDO PRINCIPAL
+   ========================================================== */
+.layout {
+  max-width: 1300px;/*establece el limite ancho de la máximo, significa que por mas grande que sea el monitor la pagina no va  aestirarse*/
+  margin: 0 auto;/*centra el contenido*/
+  display: flex;/*convierte el elemento en un contenedor flexible permitiendo que se organizen en una sola fila*/
+  align-items: flex-start;/*alinea los elementos en la parte superior*/
+  gap: 30px;/*esta es la separación entre los elementos*/
+  padding: 34px 20px 60px;/*más aire abajo para cerrar la página con calma*/
+}
+
+/* ==========================================================
+   MENÚ LATERAL (oculto): se abre con las tres rayitas
+   ========================================================== */
+.menu-lateral {
+  display: flex;/*esto hace que los elementos se alineen verticalmente*/
+  flex-direction: column;/*y este hace que los elementos se coloquen en columna*/
+  width: min(330px, 86vw);/*este seria el ancho máximo*/
+  position: fixed;/*esta seria la posicion que queda pegado en la pantalla al hacer scroll*/
+  top: 0;
+  left: 0;/*le indica al navegador que fije el menú en la esquina superior izquierda con una distancia desde arriba y la izquierda*/
+  bottom: 0;/*este con los dos anteriores, que al combinarlos está forzando a que el menú se estire verticalmente cubriendo toda la altura*/
+  z-index: 200;/*controla el orden de los elementos esto asegura que aparezca por encima de otros elementos*/
+  overflow-y: auto;/*este es para crear la barra de desplazamineto vertical*/
+  background-color: var(--blanco);/*color de fondo del menú lateral*/
+  border-right: 1px solid var(--gris-borde);/*es para hacer la linea de borde*/
+  border-top: 4px solid var(--rojo);/*es para hacer la linea de borde en la parte superior*/
+  border-radius: 0 var(--radio) var(--radio) 0;/*este es para el borde redondeado*/
+  padding: 20px;/*para otorgarle un espacio a esos elementos*/
+  box-shadow: 8px 0 34px -22px rgba(30, 30, 26, 0.4);/*sombra suave hacia la derecha*/
+  transform: translateX(-105%);/*esconde el menú, cierra el menú fuera de la pantalla*/
+  transition: transform 0.3s ease;/*y se usa con este, suaviza la animacion */
+}
+
+/* Al marcar las tres rayitas, el menú lateral entra desde la izquierda */
+.toggle-lateral:checked ~ .layout .menu-lateral {/*muestra y abre el menú a su posición normal*/
+  transform: translateX(0);
+}
+
+/* Botón para cerrar el menú lateral*/ 
+.cerrar-lateral {
+  align-self: flex-end;/*esta propiedad hace que el botón o la x se alinee al lado derecho del menú*/
+  display: flex;
+  align-items: center;
+  justify-content: center;/*esto hace que el contenido quede centrado combinando las anteriores propiedaddes */
+  width: 34px;/*este es para el ancho del boton*/
+  height: 34px;/*este es para la altura del boton*/
+  margin-bottom: 14px;/*deja un espacio al final del boton*/
+  border-radius: 50%;/*convierte el boton en un circulo perfecto*/
+  background-color: var(--gris-fondo);/*le asigna un color de fondo*/
+  color: var(--negro);/*le asigna un color de texto*/
+  font-size: 1rem;/*este sería para el tamaño de la letra */
+  font-weight: 700;/*este de acá sería para el grosor de la letra */
+  cursor: pointer;/*cambia el cursor del mouse al pasarlo y lo coloca como una mano*/
+  transition: background-color 0.2s ease, color 0.2s ease;/*hace el cambio de color al momento de pasar el cursor*/
+}
+
+.cerrar-lateral:hover {
+  background-color: var(--rojo);/*este seria el complento para cambiarle el color al momento de psar el cursor*/
+  color: var(--blanco);
+}
+
+/* Fondo oscuro que aparece detrás del menú lateral */
+.fondo-lateral {
+  position: fixed;
+  inset: 0;/*este hace que el fondo que el fondo ocupe toda la pantalla, se combina con el anterior */
+  z-index: 150;/*este es para que el fondo esté por encima de todo lo demás */
+  background-color: rgba(39, 37, 31, 0.45);
+  opacity: 0;
+  visibility: hidden;/*hace que el fondo sea totalmente invisible y qiue el navegador no lo tome en cuenta para cliks*/
+  cursor: pointer;/*esto hace que al momento de psar el cursor sobre el fondo, cambie su apariencia y se cierre el menú */
+  transition: opacity 0.3s ease, visibility 0.3s ease;/*suaviza la transición de opacidad y visibilidad */
+}
+
+.toggle-lateral:checked ~ .fondo-lateral {
+  opacity: 1; /*al ahcer clic en el boton la regla se activa y el fondo se muestra */
+  visibility: visible;
+}
+
+/* Título del menú lateral */
+.titulo-lateral {
+  display: flex;/*es para darle un espacio al titulo */
+  align-items: center;/*para colocarlo centrado*/
+  gap: 10px;/*para darle un espacio entre el icono y el texto*/
+  font-size: 1rem;/*tamaño del texto*/
+  text-transform: uppercase;/*convierte el texto a mayúsculas*/
+  letter-spacing: 0.5px;/*añade una separacion muy sutil entre cada letra */
+  margin-bottom: 14px;/*deja un margen exterior hacia abajo para separarlo del contenido*/
+  padding-bottom: 10px;/*agrega un peque;o espacio interior en la parte baja, evitando que las letras toquen el borde*/
+  border-bottom: 3px solid var(--amarillo);/*este seria para el borde que tiene unas líneas*/
+}
+
+.titulo-lateral .icono {
+  width: 24px;/*este es para darle un ancho al icono*/
+  height: 24px;/*este es para darle un alto al icono*/
+}
+
+.lista-lateral,
+.lista-lateral ul {
+  list-style: none;/*es para quitarle los puntos o vi;etas por defecto de los navegadores */
+}
+
+.grupo + .grupo {
+  margin-top: 18px;/*es par darle un espacio entre los grupos */
+}
+
+/* Iconos (SVG) del menú lateral */
+.icono {
+  display: inline-flex;
+  align-items: center;/*este es para centrar el icono verticalmente */
+  justify-content: center;/*es para centrar el icono horizontalmente */
+  width: 22px;/*este seria el ancho del icono */
+  height: 22px;/*este seria el alto del icono */
+  flex-shrink: 0;/*le indica a la caja del icono que nunca se encoja */
+}
+
+.icono img {
+  width: 100%;/*este seria para el ancho del icono */
+  height: 100%;/*este seria para el alto del icono */
+  object-fit: contain;/*este es para que la imagen se ajuste al contenedor sin distorsionarse */
+}
+
+.grupo-titulo {
+  display: flex;/*permite alinear los elementos dentro del contenedor */
+  align-items: center;/*alinea el texto verticalmente */
+  justify-content: space-between;/*distribuye el espacio entre los elementos*/
+  gap: 8px;/*el espacio de separación tanto en horizontal como en vertical*/
+  font-size: 0.88rem;/*el tamaño del texto */
+  font-weight: 700;/*el grosor del texto */
+  background-color: var(--negro);/*color de fondo*/
+  color: var(--blanco);/*color del texto*/
+  padding: 9px 12px;/*es el espacio interior del elemento*/
+  border-radius: 8px;/*le otorga un borde redondo y suaviza las esquinas del borde*/
+}
+
+.grupo-nombre {
+  display: flex;/*es para alinear los elementos dentro del contenedor */
+  align-items: center;/*es para centarlo*/
+  gap: 8px;/*el espacio entre los elementos*/
+}
+
+.grupo-titulo small {
+  color: var(--amarillo);/*color del texto*/
+  font-weight: 600;/*grosor del texto*/
+  font-size: 0.75rem;/*tamaño del texto*/
+}
+
+.grupo ul {
+  margin-top: 8px;/*añade espacio de la parte superior del elemento*/
+}
+
+.grupo li a {
+  display: flex;/*para alinear los elementos */
+  align-items: center;/*para centrar los elementos */
+  gap: 10px;/*el espaciado de los elementos */
+  text-decoration: none;/*para quitar el subrayado del enlace*/
+  color: var(--negro);/*color del texto*/
+  font-size: 0.9rem;/*tamaño del texto*/
+  padding: 7px 12px;/*espacio que esta dentro del elemento*/
+  margin: 2px 0;/*para darle un espacio fuera del elemento a los cuatro lados */
+  border-left: 3px solid var(--gris-borde);/*crea un borde visible al lado izquierdo */
+  border-radius: 0 8px 8px 0;/*borde de redondo */
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}/*duracion de la animacion a momento de pasar el cursor*/
+
+.grupo li a:hover {/*cambia al momento de pasar el cursor*/
+  background-color: rgba(255, 199, 44, 0.18);
+  border-left-color: var(--rojo);/*color del borde */
+  color: var(--rojo);
+  font-weight: 600;/*grosor dl texto*/
+}
+
+/* ==========================================================
+   CONTENIDO PRINCIPAL
+   ========================================================== */
+.contenido-principal {
+  flex: 1;/*alinear los elementos, crea el entorno  */
+  min-width: 0;/*ancho mínimo que puede tener el elemento, evitando que se reduzca demasiado al cambiar el tamaño de la pantalla*/
+  display: flex;/*define el tamaño del elemento*/
+  flex-direction: column;/*apila los elementos uno debajo del otro*/
+  gap: 24px;/*ritmo más compacto y parejo entre secciones*/
+}
+
+.seccion {
+  background-color: var(--superficie);/*color de fondo*/
+  border: 1px solid var(--gris-borde);/*limite visible del elemento, linea divisoria*/
+  border-radius: var(--radio);/*se le asigana un borde redondo suavizando las esquinas*/
+  padding: 36px;/*le otorga un espacio interior al elemento*/
+  box-shadow: var(--sombra-suave);/*sombra sutil para cada una de las secciones*/
+  scroll-margin-top: 96px;/*el título no queda tapado por la barra fija*/
+}
+
+.seccion > h2 {
+  font-size: 1.9rem;/*tamaño del texto*/
+  margin-bottom: 24px;/*margen inferior, separandolo de lo que lo sigue*/
+  padding-bottom: 12px;/*añade un borde inferior dentro del elemento*/
+  border-bottom: 2px solid var(--amarillo);/*aplica un borde visible abajo*/
+  display: inline-block; /* el subrayado amarillo solo bajo el título */
+}
+
+/* ---------- Cooltura de servicio---------- */
+.seccion-cultura {
+  display: flex;/*alinea los elementos */
+  align-items: center;/*centra los elementos */
+  gap: 32px;/*espaciado entre los elementos */
+  background-image: linear-gradient(135deg, var(--amarillo) 0%, #FFDE7A 100%);/*degradado suave*/
+  border-radius: var(--radio);/*borde redondo*/
+  padding: 36px 40px;/*el espacio interior del elemento*/
+  box-shadow: var(--sombra-suave);/*sombra sutil*/
+}
+
+.contenido-cultura h2 {
+  font-size: 2.1rem;/*tamaño del texto*/
+  line-height: 1.1;/*define la altura de la linea de texto*/
+  color: var(--negro);/*color del texto*/
+}
+
+.contenido-cultura p {
+  margin-top: 12px;/*margen superior, separandolo de lo que lo sigue*/
+  font-size: 1.05rem;/*tamaño del texto*/
+  line-height: 1.6;
+  max-width: 42ch;/*establece el ancho máximo que puede tener el elemento*/
+  color: rgba(39, 37, 31, 0.78);/*color del texto*/
+}
+
+.imagen-cultura {
+  margin-left: auto;/*es para darle un espacio del lado izquierdo*/
+  flex-shrink: 0;/*es para que la imagen no se reduzca al momento de cambiar el tamaño de la pantalla*/
+}
+
+.imagen-cultura img {
+  width: 380px;/*ancho de la imagen*/
+  height: auto;/*alto de la imagen*/
+  border-radius: var(--radio-sm);/*borde redondo, suaviza las esquinas*/
+  box-shadow: 0 16px 36px -18px rgba(30, 30, 26, 0.4);/*sombra para separarla del fondo*/
+  transition: transform var(--velocidad) ease, box-shadow var(--velocidad) ease;
+}
+
+.imagen-cultura img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 20px 44px -18px rgba(30, 30, 26, 0.45);
+}
+
+/* ---------- Base compartida por la galería de imágenes ----------
+   Estas reglas las necesita la galería de imágenes del camino.
+   Los principios las sobrescriben más abajo con selectores más específicos. */
+.camino-ventana {
+  overflow: hidden;/*recorta las diapositivas que quedan fuera*/
+  contain: paint;/*evita desbordes horizontales de la página*/
+  padding: 14px 6px;
+}
+
+.camino-lista {
+  list-style: none;
+  display: flex;/*las diapositivas se alinean en una fila*/
+  transform: translateX(0);/*posición inicial*/
+  transition: transform 0.22s ease-out;/*cambio rápido y suave*/
+  will-change: transform;/*el navegador lo prepara para moverse sin demora*/
+  touch-action: pan-y;
+}
+
+.camino-item {
+  flex: 0 0 100%;/*cada diapositiva ocupa todo el ancho de la ventana*/
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+}
+
+/* ---------- Principios: 5 tarjetas en fila, sin controles ---------- */
+.principios-grupo {
+  counter-reset: principio;/*inicializa el contador 01 a 05*/
+}
+
+.principios-grupo .principios-ventana {
+  overflow: visible;/*se ven las 5 tarjetas sin recortes*/
+  contain: none;/*se anula la contención de la galería de imágenes*/
+  padding: 74px 4px 6px;/*espacio reservado para el levantamiento*/
+}
+
+.principios-grupo .principios-lista {
+  list-style: none;
+  display: flex;/*las 5 tarjetas comparten una sola fila*/
+  justify-content: center;
+  align-items: stretch;
+  gap: clamp(8px, 1.3vw, 18px);
+}
+
+.principios-grupo .principio-item {
+  flex: 1 1 0;/*cada tarjeta ocupa una quinta parte*/
+  min-width: 0;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  transform: translateY(0) scale(1);/*posición de reposo*/
+  transform-origin: bottom center;/*crece desde la base al levantarse*/
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Al pasar el cursor (o al tocar en pantallas táctiles) la tarjeta se eleva */
+.principios-grupo .principio-item:hover,
+.principios-grupo .principio-item:active {
+  transform: translateY(-48px) scale(1.05);
+  z-index: 2;/*se dibuja por encima de las vecinas*/
+}
+
+.principios-grupo .principio-item .tarjeta-principio {
+  width: 100%;/*la tarjeta ocupa toda su celda*/
+}
+
+/* Controles de la galería de imágenes del camino */
+.camino-controles {
+  position: relative;/*las flechas se ubican dentro de esta fila*/
+  min-height: 42px;/*deja alto suficiente para las flechas*/
+  max-width: 640px;/*ancho base compartido con la galería del camino*/
+  display: flex;/*alinea los elementos*/
+  align-items: center;/*los centra en el eje trasversal*/
+  justify-content: center;/*centra los elementos en el eje principal*/
+  gap: 18px;/*separacion de los elementos*/
+  margin: 14px auto 0;/*centra la fila debajo de la tarjeta*/
+}
+
+.camino-flecha {
+  display: flex;/*alinea los elementos */
+  align-items: center;/*centra los elementos */
+  justify-content: center;/*los centra en el eje principal*/
+  width: 42px;/*ancho de la flecha*/
+  height: 42px;/*alto de la flecha*/
+  border: 1px solid var(--gris-borde);/*es para darle un borde o una línea alrededor del elemento*/
+  border-radius: 50%;/*borde redondo*/
+  background-color: var(--blanco);/*color de fondo*/
+  color: var(--negro);/*color del elemento*/
+  font-size: 1.5rem;/*tamaño de la flecha*/
+  line-height: 1;/*define la altura de la línea del elemento*/
+  cursor: pointer;/*cambia el cursor al pasar sobre el elemento*/
+  transition: background-color 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+}/*cambia el color del elemento al pasar el cursor sobre él*/
+
+.camino-flecha:hover:not(:disabled) {/*este es para cambiar el color del elemento al pasar el cursor sobre él*/
+  background-color: var(--amarillo);
+  border-color: var(--amarillo);
+}
+
+.camino-flecha:disabled {
+  opacity: 0.35;/*vuelve elbotón menos opaco*/
+  cursor: default;/*cambia el cursor al pasar sobre el elemento*/
+}
+
+.camino-puntos {/*puntos que salen debajo de la galería*/
+  display: flex;/*para alinaer los elementos */
+  align-items: center;/*centra los elementos */
+  gap: 8px;/*espacio entre los elementos*/
+}
+
+.camino-punto {
+  display: inline-block;/*permite que los elementos se alineen horizontalmente, le aplicamos un estilo */
+  width: 10px;/*ancho del punto*/
+  height: 10px;/*alto del punto*/
+  padding: 0;/*espacio interno*/
+  border: 0;/*borde al elemento*/
+  border-radius: 50%;/*borde redondo*/
+  background-color: #c9c9c9;/*color del punto*/
+  cursor: pointer;/*cambia el cursor al pasar sobre el elemento*/
+  transition: background-color 0.2s ease, transform 0.2s ease;/*transición para el cambio de color y escala*/
+}
+
+.camino-punto:hover {
+  background-color: var(--amarillo-hover);/*este seria el cambio de color al pasar el cursor sobre el punto*/
+}
+
+.camino-punto.activo {/*selecciona el punto activo o el elemento que se esté viendo*/
+  background-color: var(--rojo);/*cambio de color para el punto activo*/
+  transform: scale(1.3);/*aplica una escala al punto activo, haciendo que se vea mas grande*/
+}
+
+
+/* En pantallas medianas las tarjetas se acomodan en dos filas */
+@media (max-width: 900px) {
+  .principios-grupo .principios-lista { flex-wrap: wrap; }
+  .principios-grupo .principio-item { flex: 0 0 calc(33.333% - 12px); }
+}
+
+/* En celulares, dos por fila */
+@media (max-width: 600px) {
+  .principios-grupo .principio-item { flex: 0 0 calc(50% - 8px); }
+}
+
+/* En pantallas muy estrechas, una por fila */
+@media (max-width: 400px) {
+  .principios-grupo .principio-item { flex: 0 0 100%; }
+}
+
+/* Tarjeta de una sola cara: título y concepto siempre visibles */
+.tarjeta-principio {
+  counter-increment: principio;/*numeración 01 a 05*/
+  display: flex;/*organiza el contenido en columna*/
+  flex-direction: column;
+  gap: 10px;
+  min-height: 330px;
+  padding: 24px 18px;
+  border-radius: var(--radio-sm);
+  background-color: var(--superficie);
+  border: 1px solid var(--gris-borde);
+  border-left: 3px solid var(--rojo);
+  box-shadow: var(--sombra-suave);
+  cursor: default;/*las tarjetas ya no son clicables*/
+  touch-action: manipulation;/*evita el retraso de zoom por doble toque*/
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: box-shadow var(--velocidad) ease, background-color var(--velocidad) ease;
+}
+
+.contenido-principio {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.tarjeta-principio::before {
+  content: counter(principio, decimal-leading-zero);
+  align-self: flex-start;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background-color: var(--acento-suave);
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--rojo);
+}
+
+.tarjeta-principio h3 {
+  font-size: 1rem;
+  color: var(--negro);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--amarillo);
+}
+
+.tarjeta-principio p {
+  color: var(--gris-texto);
+  font-size: 0.88rem;
+  line-height: 1.55;
+}
+
+/* Realce al pasar el mouse */
+.tarjeta-principio:hover {
+  background-color: var(--superficie-suave);
+  box-shadow: var(--sombra-elevada);
+}
+
+/* ---------- Evolución cooltural (mismas barras) ---------- */
+#evolucion {
+  counter-reset: evolucion;
+}
+
+.evolucion-item {
+  counter-increment: evolucion;
+  position: relative;
+  background-color: var(--superficie-suave);
+  border: 1px solid var(--gris-borde);
+  border-left: 3px solid var(--amarillo);
+  border-radius: 0 var(--radio-sm) var(--radio-sm) 0;
+  padding: 20px 26px 20px 62px;
+  box-shadow: var(--sombra-suave);
+  transition: transform var(--velocidad) ease, box-shadow var(--velocidad) ease, border-left-color var(--velocidad) ease;
+}
+
+.evolucion-item::before {
+  content: counter(evolucion);
+  position: absolute;
+  left: 18px;
+  top: 20px;
+  width: 28px;
+  height: 28px;
+  background-color: var(--acento-suave);
+  color: var(--rojo);
+  font-size: 0.85rem;
+  font-weight: 800;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.evolucion-item:hover {
+  transform: translateX(4px);
+  box-shadow: var(--sombra-elevada);
+  border-left-color: var(--rojo);
+}
+
+.evolucion-item + .evolucion-item {
+  margin-top: 12px;
+}
+
+.evolucion-item .pregunta {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--rojo);
+  margin-bottom: 8px;
+}
+
+.evolucion-item p {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--gris-texto);
+}
+
+.evolucion-item strong {
+  color: var(--negro);
+}
+
+/* ---------- Galería de imágenes del camino de formación ----------
+   Funciona solo con HTML y CSS: tres radios ocultos guardan el estado,
+   las flechas y los puntos son etiquetas que marcan esos radios. */
+.camino-grupo {
+  position: relative;
+  margin-bottom: 26px;
+}
+
+/* Radios ocultos (carrusel y días). Se ocultan sin display:none para que
+   las etiquetas sí activen el radio. */
+.control-camino,
+.control-dia {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* La lista se mueve a la imagen que corresponde al radio marcado.
+   Se usa la clase .camino-lista para que la galería siga
+   funcionando aunque se quite alguna clase auxiliar del HTML. */
+#camino-imagen-1:checked ~ .camino-escenario .camino-lista {
+  transform: translateX(0);
+}
+
+#camino-imagen-2:checked ~ .camino-escenario .camino-lista {
+  transform: translateX(-100%);
+}
+
+#camino-imagen-3:checked ~ .camino-escenario .camino-lista {
+  transform: translateX(-200%);
+}
+
+/* Cada imagen tiene su propio par de flechas; solo se ve el del estado actual. */
+.flechas-camino {
+  position: absolute;
+  inset: 0;
+  display: none;
+  pointer-events: none;
+}
+
+.flechas-camino .camino-flecha-lado {
+  pointer-events: auto;
+}
+
+#camino-imagen-1:checked ~ .camino-escenario .estado-1,
+#camino-imagen-2:checked ~ .camino-escenario .estado-2,
+#camino-imagen-3:checked ~ .camino-escenario .estado-3 {
+  display: block;
+}
+
+/* Punto activo según la imagen visible. */
+#camino-imagen-1:checked ~ .camino-controles .camino-punto[for="camino-imagen-1"],
+#camino-imagen-2:checked ~ .camino-controles .camino-punto[for="camino-imagen-2"],
+#camino-imagen-3:checked ~ .camino-controles .camino-punto[for="camino-imagen-3"] {
+  background-color: var(--rojo);
+  transform: scale(1.3);
+}
+
+/* ---------- Carrusel del Camino de Formación LEC ----------
+   Usa radios propios para no interferir con el de Crew. Como tiene dos
+   diapositivas, la segunda solo desplaza un 100% (no un 200%). */
+#lec-imagen-1:checked ~ .camino-escenario .camino-lista {
+  transform: translateX(0);
+}
+
+#lec-imagen-2:checked ~ .camino-escenario .camino-lista {
+  transform: translateX(-100%);
+}
+
+#lec-imagen-1:checked ~ .camino-escenario .estado-1,
+#lec-imagen-2:checked ~ .camino-escenario .estado-2 {
+  display: block;
+}
+
+#lec-imagen-1:checked ~ .camino-controles .camino-punto[for="lec-imagen-1"],
+#lec-imagen-2:checked ~ .camino-controles .camino-punto[for="lec-imagen-2"] {
+  background-color: var(--rojo);
+  transform: scale(1.3);
+}
+
+.camino-escenario {
+  position: relative;
+}
+
+.camino-grupo .camino-ventana {
+  padding: 0 0 4px;
+}
+
+.camino-flecha-lado {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 48px;
+  height: 48px;
+  font-size: 1.9rem;
+  background-color: rgba(255, 255, 255, 0.92);
+  border-color: transparent;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
+}
+
+.camino-flecha-izquierda {
+  left: 14px;
+}
+
+.camino-flecha-derecha {
+  right: 14px;
+}
+
+.diapositiva-camino {
+  width: 100%;
+  margin: 0;
+  background-color: var(--blanco);
+  border: 1px solid var(--gris-borde);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.diapositiva-camino img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  background-color: var(--blanco);
+  -webkit-user-drag: none;
+  user-select: none;
+}
+
+.diapositiva-camino figcaption {
+  padding: 12px 18px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--rojo);
+  background-color: var(--gris-fondo);
+  border-top: 3px solid var(--amarillo);
+}
+
+/* ---------- Camino de formación (línea de tiempo) ---------- */
+.etiqueta {
+  display: block;
+  width: fit-content;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--blanco);
+  background-color: var(--rojo);
+  padding: 5px 12px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.linea-tiempo {
+  counter-reset: dia;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.linea-tiempo li {
+  counter-increment: dia;
+  position: relative;
+  background-color: var(--superficie-suave);
+  border: 1px solid var(--gris-borde);
+  border-left: 3px solid var(--amarillo);
+  border-radius: 0 var(--radio-sm) var(--radio-sm) 0;
+  padding: 14px 20px 14px 50px;
+  line-height: 1.55;
+  font-size: 0.92rem;
+  transition: transform var(--velocidad) ease, box-shadow var(--velocidad) ease;
+}
+
+.linea-tiempo li:hover {
+  transform: translateX(3px);
+  box-shadow: var(--sombra-suave);
+}
+
+.linea-tiempo li::before {
+  content: counter(dia);
+  position: absolute;
+  left: 14px;
+  top: 14px;
+  width: 24px;
+  height: 24px;
+  background-color: var(--rojo);
+  color: var(--blanco);
+  font-size: 0.72rem;
+  font-weight: 800;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.linea-tiempo strong {
+  color: var(--rojo);
+}
+
+/* ---------- Camino de formación: días en rejilla, como las estaciones ----------
+   Tarjetas una al lado de otra. Al pulsar un día solo cambia el contenido:
+   no hay anclas, no hay desplazamiento y funciona igual en el celular.
+   El carrusel permanece siempre visible. Sin JavaScript. */
+#camino-dias,
+#camino-lec-dias {
+  position: relative;
+}
+
+/* "Volver" entra en el flujo normal, justo encima del detalle */
+.volver-dias {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  margin-bottom: 14px;
+  padding: 9px 16px;
+  border: 1px solid var(--gris-borde);
+  border-radius: 999px;
+  background-color: var(--superficie);
+  color: var(--negro);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--velocidad) ease, border-color var(--velocidad) ease, transform var(--velocidad) ease;
+}
+
+.volver-dias:hover {
+  background-color: var(--amarillo);
+  border-color: var(--amarillo);
+  transform: translateX(-3px);
+}
+
+.camino-pista {
+  margin-bottom: 14px;
+  font-size: 0.85rem;
+  color: var(--gris-texto);
+}
+
+/* Los días van en una sola fila, uno al lado del otro. Si no caben,
+   la fila se desplaza lateralmente en vez de bajar a otra línea. */
+.rejilla-dias {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scrollbar-width: thin;
+}
+
+:is(#camino, #camino-lec) .dia-boton {
+  flex: 0 0 150px;
+  min-width: 150px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 118px;
+  padding: 16px 14px;
+  text-align: left;
+  color: var(--negro);
+  font-family: inherit;
+  text-decoration: none;
+  border: 1px solid var(--gris-borde);
+  border-left: 3px solid var(--amarillo);
+  border-radius: var(--radio-sm);
+  background-color: var(--superficie);
+  box-shadow: var(--sombra-suave);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--velocidad) ease, box-shadow var(--velocidad) ease, border-color var(--velocidad) ease, background-color var(--velocidad) ease;
+}
+
+:is(#camino, #camino-lec) .dia-boton:hover {
+  transform: translateY(-4px);
+  border-left-color: var(--rojo);
+  box-shadow: var(--sombra-elevada);
+}
+
+.dia-numero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 30px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background-color: var(--rojo);
+  color: var(--blanco);
+  font-size: 0.78rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+:is(#camino, #camino-lec) .dia-titulo {
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+:is(#camino, #camino-lec) .dia-resumen {
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--gris-texto);
+}
+
+:is(#camino, #camino-lec) .dia-icono {
+  position: absolute;
+  top: 14px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--gris-fondo);
+  color: var(--rojo);
+  font-size: 0.85rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+:is(#camino, #camino-lec) .dia-icono::before {
+  content: "+";
+}
+
+.camino-detalles {
+  margin-top: 0;
+}
+
+.camino-detalles .dia-detalle {
+  display: none;
+  /* Aparece en el mismo sitio donde estaba la rejilla: sin salto de scroll */
+  padding: 26px 30px;
+  background-color: var(--superficie);
+  border: 1px solid var(--gris-borde);
+  border-left: 4px solid var(--rojo);
+  border-radius: 0 var(--radio) var(--radio) 0;
+  box-shadow: var(--sombra-elevada);
+  animation: aparecer-detalle 0.25s ease;
+}
+
+.dia-detalle-titulo {
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--amarillo);
+  font-size: 1.35rem;
+  color: var(--negro);
+}
+
+:is(#camino, #camino-lec) .dia-detalle p {
+  margin: 0;
+  color: var(--gris-texto);
+  font-size: 1.05rem;
+  line-height: 1.7;
+}
+
+.dia-detalle ul {
+  margin: 0;
+  padding-left: 22px;
+  color: var(--gris-texto);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.dia-detalle ul li + li {
+  margin-top: 6px;
+}
+
+@keyframes aparecer-detalle {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Días elegidos con radios (sin JavaScript ni scroll) ----------
+   Antes se usaban anclas :target, que hacían que el navegador desplazara la
+   página (y el scroll-snap peleara con el desplazamiento suave). Ahora el
+   radio solo cambia qué se ve, en el mismo punto de la pantalla. */
+.camino-descripcion:has(.dia-opcion:checked) .camino-pista,
+.camino-descripcion:has(.dia-opcion:checked) .rejilla-dias {
+  display: none;
+}
+
+.camino-descripcion:has(.dia-opcion:checked) .volver-dias {
+  display: inline-flex;
+}
+
+/* Cada radio muestra su detalle. El orden de los details es fijo:
+   1, 2, 3, 6, 7, 12, 15, 21, 31–33, 34, 35, 36 y +41. */
+.camino-descripcion:has(.dia-1:checked) .dia-detalle:nth-child(1),
+.camino-descripcion:has(.dia-2:checked) .dia-detalle:nth-child(2),
+.camino-descripcion:has(.dia-3:checked) .dia-detalle:nth-child(3),
+.camino-descripcion:has(.dia-6:checked) .dia-detalle:nth-child(4),
+.camino-descripcion:has(.dia-7:checked) .dia-detalle:nth-child(5),
+.camino-descripcion:has(.dia-12:checked) .dia-detalle:nth-child(6),
+.camino-descripcion:has(.dia-15:checked) .dia-detalle:nth-child(7),
+.camino-descripcion:has(.dia-21:checked) .dia-detalle:nth-child(8),
+.camino-descripcion:has(.dia-31-33:checked) .dia-detalle:nth-child(9),
+.camino-descripcion:has(.dia-34:checked) .dia-detalle:nth-child(10),
+.camino-descripcion:has(.dia-35:checked) .dia-detalle:nth-child(11),
+.camino-descripcion:has(.dia-36:checked) .dia-detalle:nth-child(12),
+.camino-descripcion:has(.dia-41:checked) .dia-detalle:nth-child(13) {
+  display: block;
+}
+
+/* Camino LEC: los 20 pasos van en orden consecutivo, por eso cada radio
+   muestra su tarjeta con el mismo número. */
+#camino-lec:has(.lec-1:checked) .dia-detalle:nth-child(1),
+#camino-lec:has(.lec-2:checked) .dia-detalle:nth-child(2),
+#camino-lec:has(.lec-3:checked) .dia-detalle:nth-child(3),
+#camino-lec:has(.lec-4:checked) .dia-detalle:nth-child(4),
+#camino-lec:has(.lec-5:checked) .dia-detalle:nth-child(5),
+#camino-lec:has(.lec-6:checked) .dia-detalle:nth-child(6),
+#camino-lec:has(.lec-7:checked) .dia-detalle:nth-child(7),
+#camino-lec:has(.lec-8:checked) .dia-detalle:nth-child(8),
+#camino-lec:has(.lec-9:checked) .dia-detalle:nth-child(9),
+#camino-lec:has(.lec-10:checked) .dia-detalle:nth-child(10),
+#camino-lec:has(.lec-11:checked) .dia-detalle:nth-child(11),
+#camino-lec:has(.lec-12:checked) .dia-detalle:nth-child(12),
+#camino-lec:has(.lec-13:checked) .dia-detalle:nth-child(13),
+#camino-lec:has(.lec-14:checked) .dia-detalle:nth-child(14),
+#camino-lec:has(.lec-15:checked) .dia-detalle:nth-child(15),
+#camino-lec:has(.lec-16:checked) .dia-detalle:nth-child(16),
+#camino-lec:has(.lec-17:checked) .dia-detalle:nth-child(17),
+#camino-lec:has(.lec-18:checked) .dia-detalle:nth-child(18),
+#camino-lec:has(.lec-19:checked) .dia-detalle:nth-child(19),
+#camino-lec:has(.lec-20:checked) .dia-detalle:nth-child(20) {
+  display: block;
+}
+
+/* ---------- Estaciones de trabajo ---------- */
+.duracion {
+  background-color: var(--rojo);
+  color: var(--blanco);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Solo se muestra una tarjeta a la vez (la que está en :target), así que
+   el contenedor no necesita flex: la tarjeta se centra con su max-width. */
+.contenedor-estaciones {
+  width: 100%;
+  max-width: 1200px;      /* evita que se pegue a los bordes en pantallas anchas */
+  margin: 0 auto;         /* centra la tarjeta visible en la pantalla */
+}
+
+/* Rejilla de 2 columnas: el icono a la izquierda (arriba) y todo el
+   texto a la derecha. Así el texto de cada estación se lee en líneas
+   horizontales normales y no queda cortado "por partes". */
+.tarjeta-estacion {
+  display: grid;
+  margin: 0;
+  place-items: start stretch;
+  grid-template-columns: 44px 1fr;
+  column-gap: 18px;
+  row-gap: 6px;
+  align-items: center;   /* el icono queda a la altura del nombre */
+  align-content: center; /* en las tarjetas cortas, el contenido va centrado */
+  min-height: 84px;      /* todas las tarjetas con el mismo alto */
+  background-color: var(--superficie-suave);
+  border: 1px solid var(--gris-borde);
+  border-left: 3px solid var(--amarillo);
+  border-radius: 0 var(--radio-sm) var(--radio-sm) 0;
+  padding: 16px 20px;
+  box-shadow: var(--sombra-suave);
+  transition: transform var(--velocidad) ease, box-shadow var(--velocidad) ease, border-left-color var(--velocidad) ease;
+}
+
+.tarjeta-estacion:hover {
+  transform: translateX(4px);
+  box-shadow: var(--sombra-elevada);
+  border-left-color: var(--rojo);
+}
+
+/* El icono, en la primera columna de la primera fila */
+.icono-estacion {
+  grid-column: 1;
+  grid-row: 1;
+  width: 44px;
+  height: 44px;
+  margin-bottom: 0;
+}
+
+/* El nombre de la estación, al lado del icono */
+.tarjeta-estacion > h4 {
+  grid-column: 2;
+  grid-row: 1;
+  text-align: left;
+  font-size: 1.05rem;
+  color: var(--negro);
+}
+
+/* El contenido de la estación (párrafos, listas y recetas) se muestra
+   siempre visible, debajo del icono y del nombre, sin desplegable */
+.estacion-contenido {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+  color: var(--gris-texto);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Las estaciones que todavía no tienen contenido quedan compactas */
+.estacion-contenido:empty {
+  display: none;
+}
+
+.estacion-contenido ul {
+  list-style: disc;
+  padding-left: 20px;
+}
+
+.estacion-contenido ul li {
+  margin-bottom: 2px;
+}
+
+
+/* Los subtítulos internos de cada estación, en negrita y color oscuro */
+.estacion-contenido p > strong {
+  color: var(--negro);
+}
+
+/* ==========================================================
+   RECETAS DE PREPARACIÓN (estación Preparación Menú Regular)
+   ========================================================== */
+.recetas {
+  grid-column: 1 / -1; /* ocupa las dos columnas de la tarjeta */
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.grupo-recetas + .grupo-recetas {
+  margin-top: 0;
+}
+
+/* En Parrilla el contenido se muestra como texto corrido, sin tarjetas */
+#parrilla .grupo-recetas {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#parrilla .titulo-grupo-recetas {
+  align-self: flex-start;
+}
+
+.titulo-grupo-recetas {
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--negro);
+  background-color: var(--amarillo);
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.rejilla-recetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr));
+  gap: 12px;
+}
+
+.bloque-receta {
+  background-color: var(--superficie);
+  border: 1px solid var(--gris-borde);
+  border-left: 3px solid var(--rojo);
+  border-radius: 0 var(--radio-sm) var(--radio-sm) 0;
+  padding: 14px 16px;
+  box-shadow: var(--sombra-suave);
+  transition: transform var(--velocidad) ease, box-shadow var(--velocidad) ease, border-left-color var(--velocidad) ease;
+}
+
+.bloque-receta:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sombra-elevada);
+  border-left-color: var(--amarillo);
+}
+
+.bloque-receta h6 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--negro);
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--amarillo);
+}
+
+.bloque-receta h6 + p {
+  color: var(--gris-texto);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+
+.bloque-receta ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.bloque-receta li {
+  position: relative;
+  padding-left: 16px;
+  margin-bottom: 4px;
+  color: var(--gris-texto);
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.bloque-receta li:last-child {
+  margin-bottom: 0;
+}
+
+.bloque-receta li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--amarillo);
+}
+
+/* Bloque de higiene, con el mismo estilo de las barras de principios */
+.bloque-receta.higiene {
+  background-color: var(--gris-fondo);
+  border-left-color: var(--negro);
+}
+
+.bloque-receta.higiene h6 {
+  color: var(--negro);
+  border-bottom-color: var(--negro);
+}
+
+.bloque-receta.higiene li::before {
+  background-color: var(--rojo);
+}
+
+/* Bloques de estándares / notas */
+.bloque-receta.nota {
+  background-color: var(--gris-fondo);
+  margin-bottom: 12px;
+}
+
+.bloque-receta.nota:last-child {
+  margin-bottom: 0;
+}
+
+.bloque-receta.nota p strong,
+.bloque-receta.nota li strong {
+  color: var(--negro);
+}
+
+/* ==========================================================
+   TABLAS DE DATOS (Bebidas y Postres)
+   ========================================================== */
+/* Envoltura con scroll horizontal: en el celular la tabla se mueve
+   en lugar de romper el ancho de la tarjeta */
+.tabla-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tabla-datos {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.tabla-datos th {
+  background-color: var(--superficie-suave);
+  color: var(--negro);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  padding: 10px 12px;
+  border: 1px solid var(--gris-borde);
+  border-bottom: 2px solid var(--amarillo);
+}
+
+/* Tablas con más columnas necesitan un poco más de ancho mínimo */
+.tabla-datos.ancha {
+  min-width: 680px;
+}
+
+/* Tabla de la carpeta de control McDelivery: tiene muchas columnas, por eso
+   se mueve horizontalmente en pantallas pequeñas y mantiene una línea por
+   pedido. Los encabezados pueden partirse y la descripción del combo es la
+   única columna de datos que se permite partir en varias líneas. */
+.tabla-datos.registro {
+  min-width: 980px;
+  font-size: 0.8rem;
+}
+
+.tabla-datos.registro th,
+.tabla-datos.registro td {
+  padding: 8px 9px;
+}
+
+.tabla-datos.registro th {
+  vertical-align: bottom;
+  white-space: normal;
+}
+
+.tabla-datos.registro td {
+  white-space: nowrap;
+}
+
+.tabla-datos.registro td:nth-child(5) {
+  min-width: 200px;
+  white-space: normal;
+}
+
+.tabla-datos td {
+  padding: 9px 12px;
+  border: 1px solid var(--gris-borde);
+  color: var(--gris-texto);
+  vertical-align: top;
+}
+
+.tabla-datos tbody tr:nth-child(even) {
+  background-color: var(--gris-fondo);
+}
+
+.tabla-datos tbody tr:hover {
+  background-color: rgba(255, 199, 44, 0.18);
+}
+
+.tabla-datos td:first-child {
+  color: var(--negro);
+  font-weight: 600;
+}
+
+.tabla-datos td strong {
+  color: var(--negro);
+}
+
+/* ==========================================================
+   PIE DE PÁGINA
+   ========================================================== */
+footer {
+  background-color: var(--negro);
+  color: rgba(255, 255, 255, 0.78);
+  text-align: center;
+  padding: 30px 24px;
+  margin-top: 12px;
+  border-top: 3px solid var(--amarillo);
+}
+
+footer p {
+  font-size: 0.85rem;
+  letter-spacing: 0.01em;
+}
+
+/* ==========================================================
+   MOVIMIENTO SUAVE (solo CSS)
+   ========================================================== */
+/* Las secciones aparecen con un ascenso breve al entrar en pantalla.
+   Si el navegador no admite líneas de tiempo de scroll, se ven normales. */
+@keyframes revelar-seccion {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .contenido-principal > section {
+      animation: revelar-seccion linear both;
+      animation-timeline: view();
+      animation-range: entry 5% entry 95%;
+    }
+  }
+}
+
+/* Quien prefiera menos movimiento ve todo quieto y legible */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================
+   RESPONSIVE
+   ========================================================== */
+@media (max-width: 900px) {
+
+  /* El menú horizontal se puede mover de lado a lado */
+  .menu-lista {
+    min-width: 0;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .menu-lista::-webkit-scrollbar {
+    display: none;
+  }
+
+  .menu-lista li {
+    flex-shrink: 0;
+  }
+
+  .menu-lista a {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    white-space: nowrap;
+  }
+
+  .seccion {
+    padding: 26px;
+  }
+
+  .seccion > h2 {
+    font-size: 1.6rem;
+  }
+
+  .seccion-cultura {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px;
+  }
+
+  .contenido-cultura h2 {
+    font-size: 1.8rem;
+  }
+
+  .contenido-cultura p {
+    max-width: none;
+  }
+
+  .imagen-cultura {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .imagen-cultura img {
+    width: 100%;
+  }
+
+  .evolucion-item {
+    padding: 18px 18px 18px 54px;
+  }
+
+  .evolucion-item::before {
+    left: 14px;
+    top: 18px;
+    width: 27px;
+    height: 27px;
+    font-size: 0.85rem;
+  }
+
+  .evolucion-item .pregunta {
+    font-size: 1.12rem;
+  }
+
+  .evolucion-item p {
+    font-size: 1rem;
+  }
+
+  .camino-flecha-lado {
+    width: 38px;
+    height: 38px;
+    font-size: 1.6rem;
+  }
+
+  .camino-flecha-izquierda {
+    left: 8px;
+  }
+
+  .camino-flecha-derecha {
+    right: 8px;
+  }
+
+  .diapositiva-camino figcaption {
+    font-size: 0.9rem;
+    padding: 10px 14px;
+  }
+}
+
+/* ==========================================================
+   UNA SECCIÓN POR PANTALLA
+   Cada sección ocupa el alto visible y el navegador la alinea
+   al hacer scroll, así solo se muestra una a la vez.
+   ========================================================== */
+.contenido-principal > section {
+  scroll-snap-align: start;
+  scroll-snap-stop: normal;
+  min-height: calc(100vh - 100px);
+  min-height: calc(100svh - 100px);
+}
+
+/* Contenido corto: se centra verticalmente dentro de su pantalla.
+   Si la sección es más alta que la pantalla, crece y se lee normal. */
+.seccion {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: center;
+}
+
+/* El subrayado amarillo del título sigue ajustándose al texto */
+.seccion > h2 {
+  justify-self: start;
+}
+
+/* El pie sí es punto de imán: se alinea al final de la pantalla, así al
+   llegar abajo se queda visible en vez de volver a la última sección. */
+footer {
+  scroll-snap-align: end;
+  scroll-snap-stop: normal;
+}
+
+/* ==========================================================
+   TELÉFONOS
+   ========================================================== */
+@media (max-width: 600px) {
+  html {
+    /* La barra móvil es más baja: la sección arranca más arriba */
+    scroll-padding-top: 72px;
+  }
+
+  body {
+    /* clip evita el scroll horizontal sin crear un segundo contenedor de
+       scroll (hidden convertiría overflow-y en auto y pelea con el imán) */
+    overflow-x: clip;
+  }
+
+  .franjas {
+    height: 6px;
+  }
+
+  /* --- Barra superior --- */
+  .menu {
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  .marca {
+    gap: 7px;
+    font-size: 1.1rem;
+  }
+
+  .logo {
+    height: 26px;
+  }
+
+  .hamburguesa {
+    gap: 4px;
+    padding: 6px;
+  }
+
+  .hamburguesa span {
+    width: 22px;
+    height: 3px;
+  }
+
+  .menu-lista {
+    gap: 2px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .menu-lista a {
+    padding: 7px 10px;
+    font-size: 0.8rem;
+  }
+
+  /* --- Estructura general --- */
+  .layout {
+    gap: 22px;
+    padding: 16px 12px 24px;
+  }
+
+  .contenido-principal {
+    gap: 22px;
+  }
+
+  /* Cada sección sigue ocupando una pantalla completa */
+  .contenido-principal > section {
+    min-height: calc(100vh - 72px);
+    min-height: calc(100svh - 72px);
+  }
+
+  .seccion {
+    padding: 22px 16px;
+    border-radius: 14px;
+  }
+
+  .seccion > h2 {
+    font-size: 1.4rem;
+    margin-bottom: 18px;
+    padding-bottom: 8px;
+  }
+
+  /* --- Portada --- */
+  .seccion-cultura {
+    gap: 20px;
+    padding: 26px 18px;
+    border-radius: 14px;
+  }
+
+  .contenido-cultura h2 {
+    font-size: 1.6rem;
+  }
+
+  .contenido-cultura p {
+    font-size: 1rem;
+  }
+
+  .imagen-cultura img {
+    width: 100%;
+    border-radius: 10px;
+  }
+
+  /* --- Evolución --- */
+  .evolucion-item {
+    padding: 16px 14px 16px 48px;
+  }
+
+  .evolucion-item::before {
+    left: 12px;
+    top: 16px;
+    width: 25px;
+    height: 25px;
+    font-size: 0.8rem;
+  }
+
+  .evolucion-item .pregunta {
+    font-size: 1.05rem;
+  }
+
+  .evolucion-item p {
+    font-size: 0.95rem;
+  }
+
+  /* --- Principios --- */
+  .camino-ventana {
+    padding: 8px 2px;
+  }
+
+  .tarjeta-principio {
+    min-height: 215px;
+    padding: 20px 18px;
+  }
+
+  .tarjeta-principio h3 {
+    font-size: 1rem;
+  }
+
+  .tarjeta-principio p {
+    font-size: 0.88rem;
+  }
+
+  .camino-controles {
+    gap: 12px;
+  }
+
+  .camino-flecha {
+    width: 36px;
+    height: 36px;
+    font-size: 1.3rem;
+  }
+
+  /* --- Camino de formación --- */
+  .etiqueta {
+    font-size: 0.68rem;
+    padding: 4px 10px;
+  }
+
+  .linea-tiempo {
+    gap: 10px;
+  }
+
+  .linea-tiempo li {
+    padding: 14px 12px 14px 42px;
+    font-size: 0.88rem;
+  }
+
+  .linea-tiempo li::before {
+    left: 10px;
+    top: 14px;
+    width: 22px;
+    height: 22px;
+    font-size: 0.7rem;
+  }
+
+  /* Días del camino: tarjetas más estrechas en el celular */
+  .rejilla-dias {
+    gap: 8px;
+  }
+
+  :is(#camino, #camino-lec) .dia-boton {
+    flex-basis: 132px;
+    min-width: 132px;
+    min-height: 0;
+    gap: 5px;
+    padding: 12px 10px;
+  }
+
+  .dia-numero {
+    min-width: 26px;
+    height: 26px;
+    font-size: 0.7rem;
+  }
+
+  :is(#camino, #camino-lec) .dia-titulo {
+    font-size: 0.85rem;
+  }
+
+  :is(#camino, #camino-lec) .dia-resumen {
+    font-size: 0.74rem;
+  }
+
+  :is(#camino, #camino-lec) .dia-icono {
+    top: 10px;
+    right: 8px;
+    width: 18px;
+    height: 18px;
+    font-size: 0.75rem;
+  }
+
+  :is(#camino, #camino-lec) .dia-detalle {
+    padding: 18px 16px;
+  }
+
+  .dia-detalle-titulo {
+    font-size: 1.1rem;
+  }
+
+  :is(#camino, #camino-lec) .dia-detalle p {
+    font-size: 0.98rem;
+  }
+
+  /* --- Estaciones --- */
+  .tarjeta-estacion {
+    grid-template-columns: 36px 1fr;
+    column-gap: 12px;
+    padding: 14px;
+  }
+
+  .icono-estacion {
+    width: 36px;
+    height: 36px;
+  }
+
+  .tarjeta-estacion > h4 {
+    font-size: 0.98rem;
+  }
+
+  .estacion-contenido {
+    margin-top: 10px;
+    font-size: 0.9rem;
+  }
+
+  .duracion {
+    font-size: 0.68rem;
+    padding: 3px 9px;
+  }
+
+  /* --- Recetas --- */
+  .titulo-grupo-recetas {
+    font-size: 0.85rem;
+    padding: 4px 12px;
+  }
+
+  .bloque-receta {
+    padding: 12px 14px;
+  }
+
+  .bloque-receta h6 {
+    font-size: 0.92rem;
+  }
+
+  /* --- Tablas de datos --- */
+  .tabla-datos {
+    min-width: 460px;
+    font-size: 0.82rem;
+  }
+
+  .tabla-datos.ancha {
+    min-width: 560px;
+  }
+
+  .tabla-datos th,
+  .tabla-datos td {
+    padding: 8px 10px;
+  }
+
+  /* --- Menú lateral --- */
+  .menu-lateral {
+    padding: 16px;
+  }
+
+  .titulo-lateral {
+    font-size: 0.92rem;
+  }
+
+  .grupo li a {
+    font-size: 0.85rem;
+    padding: 8px 10px;
+  }
+
+  /* --- Pie de página --- */
+  footer {
+    padding: 20px 16px;
+  }
+
+  footer p {
+    font-size: 0.82rem;
+  }
+}
+
+/* Pantallas muy angostas: deja más espacio al menú horizontal */
+@media (max-width: 400px) {
+  .marca strong {
+    display: none;
+  }
+
+  .contenido-cultura h2 {
+    font-size: 1.4rem;
+  }
+
+  .seccion {
+    padding: 12px;
+  }
+
+  .seccion > h2 {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+  }
+
+  /* Evolución entra completa en la pantalla incluso en teléfonos chicos */
+  .evolucion-item {
+    padding: 12px 10px 12px 42px;
+  }
+
+  .evolucion-item::before {
+    left: 10px;
+    top: 12px;
+    width: 23px;
+    height: 23px;
+    font-size: 0.75rem;
+  }
+
+  .evolucion-item + .evolucion-item {
+    margin-top: 8px;
+  }
+
+  .evolucion-item .pregunta {
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+  }
+
+  .evolucion-item p {
+    font-size: 0.86rem;
+    line-height: 1.42;
+  }
+}
+
+/* ==========================================================
+   GALERÍA DE ESTACIONES (iconos + contenido en la misma página)
+   ========================================================== */
+/* La galería se ve siempre; las tarjetas largas se muestran solo
+   cuando su id está en la URL (ver más abajo). */
+.grupo-estaciones + .grupo-estaciones {
+  margin-top: 30px;
+}
+
+.titulo-grupo-estaciones {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.2rem;
+  margin-bottom: 16px;
+}
+
+/* Los botones de acceso a las estaciones quedan centrados. Si no caben
+   en una fila, bajan a otra (también centrada) en vez de desplazarse
+   lateralmente. */
+.rejilla-estaciones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.acceso-estacion {
+  display: flex;
+  flex: 0 0 140px;/*ancho fijo: la fila se centra en vez de estirarse*/
+  min-width: 126px;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 18px 14px;
+  text-align: center;
+  text-decoration: none;
+  color: var(--negro);
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.25;
+  background-color: var(--superficie);
+  border: 1px solid var(--gris-borde);
+  border-left: 3px solid var(--amarillo);
+  border-radius: var(--radio-sm);
+  box-shadow: var(--sombra-suave);
+  transition: transform var(--velocidad) ease, box-shadow var(--velocidad) ease, border-color var(--velocidad) ease;
+}
+
+.acceso-estacion img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.acceso-texto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.acceso-estacion .duracion {
+  margin-top: 2px;
+}
+
+.acceso-estacion:hover {
+  transform: translateY(-4px);
+  border-left-color: var(--rojo);
+  box-shadow: var(--sombra-elevada);
+}
+
+/* Botón para volver de la estación a la galería */
+.volver-estaciones {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  padding: 9px 16px;
+  border: 1px solid var(--gris-borde);
+  border-radius: 999px;
+  background-color: var(--superficie);
+  color: var(--negro);
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;/*es un enlace, no un botón*/
+  cursor: pointer;
+  transition: background-color var(--velocidad) ease, border-color var(--velocidad) ease, transform var(--velocidad) ease;
+}
+
+.volver-estaciones:hover {
+  background-color: var(--amarillo);
+  border-color: var(--amarillo);
+  transform: translateX(-3px);
+}
+
+/* ---------- Modo detalle solo con HTML y CSS ----------
+   Al tocar un icono de la galería, la URL pasa a #papas-fritas (etc.).
+   El navegador marca esa estación con :target: se oculta la galería y
+   se muestra solo esa tarjeta. "Volver" apunta a #estaciones y la
+   galería reaparece. La URL y el botón "atrás" funcionan solos. */
+.tarjeta-estacion {
+  display: none;/*ocultas mientras no estén elegidas*/
+}
+
+.tarjeta-estacion:target {
+  display: grid;
+  max-width: 860px;/*ancho limitado para que la tarjeta quede centrada*/
+  margin-inline: auto;
+  animation: aparecer-estacion 0.28s ease;
+}
+
+/* Cuando hay una estación elegida: se esconde la galería y aparece "Volver" */
+#estaciones:has(.tarjeta-estacion:target) .selector-estaciones {
+  display: none;
+}
+
+#estaciones:has(.tarjeta-estacion:target) .volver-estaciones {
+  display: flex;/*necesario para que margin-inline:auto lo centre*/
+  width: fit-content;
+  margin-inline: auto;
+}
+
+@keyframes aparecer-estacion {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 600px) {
+  .grupo-estaciones + .grupo-estaciones {
+    margin-top: 16px;
+  }
+
+  .titulo-grupo-estaciones {
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+  }
+
+  .rejilla-estaciones {
+    gap: 8px;
+  }
+
+  .acceso-estacion {
+    min-width: 160px;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 9px;
+    text-align: left;
+    font-size: 0.85rem;
+  }
+
+  .acceso-estacion img {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+  }
+
+  .acceso-texto {
+    align-items: flex-start;
+    gap: 3px;
+  }
+
+  .acceso-estacion .duracion {
+    margin-top: 0;
+  }
+
+  .volver-estaciones {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+}
