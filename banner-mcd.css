@@ -140,7 +140,7 @@
     }
 
     .banner-mcd .banner-mcd-visual {
-        min-height: 280px;
+        min-height: 200px;
     }
 
     .banner-mcd .banner-mcd-foto {
@@ -157,17 +157,17 @@
     }
 
     .banner-mcd .banner-mcd-copy {
-        padding: 78px 24px 81px;
+        padding: 40px 24px 48px;
     }
 }
 
 @media (max-width: 560px) {
     .banner-mcd .banner-mcd-visual {
-        min-height: 230px;
+        min-height: 170px;
     }
 
     .banner-mcd .banner-mcd-copy {
-        padding: 72px 20px 75px;
+        padding: 32px 20px 40px;
     }
 
     .banner-mcd .banner-mcd-title {
