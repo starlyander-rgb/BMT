@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="index.css?v=67">
     <!-- Rediseño visual: estilo Apple, sin JavaScript -->
     <link rel="stylesheet" href="apple.css?v=27">
+    <!-- Banner principal inspirado en mcdonalds.com.ve -->
+    <link rel="stylesheet" href="banner-mcd.css?v=1">
 </head>
 <body>
 
@@ -43,7 +45,7 @@
                 <span class="r2"></span>
                 <span class="r3"></span>
             </label>
-            <a href="#cooltura" class="marca">
+            <a href="#banner-principal" class="marca">
                 <img src="img/lg.ico" class="logo">
                 <strong>BMT</strong>
             </a>
@@ -70,37 +72,22 @@
         </ul>
     </nav>
 
-    <!-- BANNER CAMINO DE FORMACIÓN -->
-    <section id="banner-principal" class="seccion-banner" aria-label="Banner Camino de Formación">
-        <div class="banner-contenedor">
-            <div class="banner-copy">
-                <h2 class="banner-titulo">Camino de Formación</h2>
-                <p class="banner-subtitulo">Guía de entrenamiento.</p>
-                <p class="banner-seccion-label">EN ESTA PÁGINA ENCONTRARÁS</p>
-                <div class="banner-listas">
-                    <ul class="banner-lista">
-                        <li><span class="banner-dot dot-rojo" aria-hidden="true"></span><span>Cooltura: Propósito, Principios e Identidad</span></li>
-                        <li><span class="banner-dot dot-amarillo" aria-hidden="true"></span><span>Influencers vendedores · 6 herramientas</span></li>
-                        <li><span class="banner-dot dot-negro" aria-hidden="true"></span><span>Hospitalidad: 5 estándares y Promesa de entrenamiento</span></li>
-                    </ul>
-                    <ul class="banner-lista">
-                        <li><span class="banner-dot dot-rojo" aria-hidden="true"></span><span>Camino de Formación Crew</span></li>
-                        <li><span class="banner-dot dot-amarillo" aria-hidden="true"></span><span>Camino de Formación LEC y Rol del LEC</span></li>
-                        <li><span class="banner-dot dot-negro" aria-hidden="true"></span><span>12 estaciones: Producción y Servicio</span></li>
-                    </ul>
-                </div>
-            </div>
-            <aside class="banner-resumen" aria-label="Resumen del contenido">
-                <p class="banner-resumen-label">RESUMEN DEL CONTENIDO</p>
-                <div class="banner-resumen-item item-programas">
-                    <p class="banner-resumen-titulo">1. Programas</p>
-                    <p class="banner-resumen-detalle">Crew · LEC · Rol del LEC</p>
-                </div>
-                <div class="banner-resumen-item item-estaciones">
-                    <p class="banner-resumen-titulo">2. Estaciones</p>
-                    <p class="banner-resumen-detalle">5 Producción · 7 Servicio</p>
-                </div>
-            </aside>
+    <!-- BANNER PRINCIPAL: inspirado en la portada de McDonald's Venezuela -->
+    <section id="banner-principal" class="seccion-banner banner-mcd" aria-label="Banner McDonald's BMT Guías de entrenamiento">
+        <div class="banner-mcd-visual">
+            <picture class="banner-mcd-foto">
+                <source media="(max-width: 900px)" srcset="img/mcd-hamburguesa-banner-mobile.jpg">
+                <img src="img/mcd-hamburguesa-banner.jpg" alt="Hamburguesa McDonald's" width="560" height="296">
+            </picture>
+        </div>
+        <div class="banner-mcd-copy">
+            <p class="banner-mcd-eyebrow">BMT · CAMINO DE FORMACIÓN</p>
+            <h1 class="banner-mcd-title">McDonald's BMT <span>Guías de entrenamiento</span></h1>
+            <ul class="banner-mcd-temas">
+                <li><span class="tema-punto rojo" aria-hidden="true"></span>Cooltura y principios</li>
+                <li><span class="tema-punto amarillo" aria-hidden="true"></span>Influencers vendedores</li>
+                <li><span class="tema-punto negro" aria-hidden="true"></span>12 estaciones de trabajo</li>
+            </ul>
         </div>
     </section>
 

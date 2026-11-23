@@ -311,7 +311,7 @@ body:has(#estaciones:target) .capitulo[href="#estaciones"] {
 }
 
 .grupo li a .duracion {
-  color: var(--gris);
+  color: var(--blanco);
 }
 
 .fondo-lateral {
@@ -1023,7 +1023,7 @@ body:has(#estaciones:target) .capitulo[href="#estaciones"] {
 }
 
 .acceso-estacion .duracion {
-  color: var(--gris);
+  color: var(--blanco);
 }
 
 .acceso-estacion:hover {

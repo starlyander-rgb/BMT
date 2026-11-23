@@ -1,0 +1,181 @@
+/* =========================================================
+   Banner principal inspirado en la portada de mcdonalds.com.ve
+   (texto a la izquierda, bloque de imagen a la derecha).
+   Se carga después de apple.css para reemplazar el banner anterior.
+   ========================================================= */
+
+.seccion-banner.banner-mcd {
+    display: grid;
+    grid-template-columns: minmax(0, 61fr) minmax(0, 39fr);
+    grid-template-areas: "copy visual";
+    align-items: stretch;
+    width: 100%;
+    /* Misma altura que la sección "Cooltura de servicio" */
+    min-height: 78vh;
+    min-height: min(78vh, 720px);
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+}
+
+/* ---------- Columna de texto ---------- */
+.banner-mcd .banner-mcd-copy {
+    grid-area: copy;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 70px clamp(24px, 7vw, 104px);
+    padding-top: calc(clamp(70px, 12vw, 160px) + 38px);
+    padding-bottom: calc(clamp(70px, 12vw, 160px) + 37px);
+    background: #ffffff;
+}
+
+.banner-mcd .banner-mcd-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: #da291c;
+}
+
+.banner-mcd .banner-mcd-title {
+    margin: 0;
+    font-size: clamp(2.6rem, 4vw, 3.5rem);
+    line-height: 1.06;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #292929;
+}
+
+.banner-mcd .banner-mcd-title span {
+    display: block;
+}
+
+.banner-mcd .banner-mcd-title span::after {
+    content: "";
+    display: block;
+    width: 64px;
+    height: 5px;
+    margin-top: 16px;
+    border-radius: 3px;
+    background: #ffbc0d;
+}
+
+.banner-mcd .banner-mcd-lead {
+    margin: 22px 0 0;
+    max-width: 46ch;
+    font-size: clamp(1.05rem, 1.8vw, 1.6rem);
+    line-height: 1.5;
+    color: #5b5b5b;
+}
+
+.banner-mcd .banner-mcd-temas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 22px;
+    margin: 28px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.banner-mcd .banner-mcd-temas li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #454545;
+}
+
+.banner-mcd .tema-punto {
+    width: 9px;
+    height: 9px;
+    flex: 0 0 9px;
+    border-radius: 50%;
+}
+
+.banner-mcd .tema-punto.rojo { background: #da291c; }
+.banner-mcd .tema-punto.amarillo { background: #ffbc0d; }
+.banner-mcd .tema-punto.negro { background: #292929; }
+
+/* ---------- Columna visual: foto original de McDonald's Venezuela ---------- */
+.banner-mcd .banner-mcd-visual {
+    grid-area: visual;
+    position: relative;
+    min-height: 100%;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+/* La foto nítida se muestra completa, sin agrandarse más de lo necesario */
+.banner-mcd .banner-mcd-foto {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: end;
+}
+
+.banner-mcd .banner-mcd-foto img {
+    display: block;
+    width: 135%;
+    max-width: none;
+    height: auto;
+    object-fit: contain;
+    /* La hamburguesa original está al lado derecho */
+    object-position: right center;
+}
+
+/* ---------- Adaptación a pantallas pequeñas ---------- */
+@media (max-width: 900px) {
+    .seccion-banner.banner-mcd {
+        grid-template-columns: 1fr;
+        grid-template-areas: "visual" "copy";
+        min-height: auto;
+    }
+
+    .banner-mcd .banner-mcd-visual {
+        min-height: 280px;
+    }
+
+    .banner-mcd .banner-mcd-foto {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+    .banner-mcd .banner-mcd-foto img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .banner-mcd .banner-mcd-copy {
+        padding: 78px 24px 81px;
+    }
+}
+
+@media (max-width: 560px) {
+    .banner-mcd .banner-mcd-visual {
+        min-height: 230px;
+    }
+
+    .banner-mcd .banner-mcd-copy {
+        padding: 72px 20px 75px;
+    }
+
+    .banner-mcd .banner-mcd-title {
+        font-size: clamp(1.85rem, 8vw, 2.4rem);
+    }
+
+    .banner-mcd .banner-mcd-temas {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
